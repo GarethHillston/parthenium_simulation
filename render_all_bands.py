@@ -20,7 +20,7 @@ band_names = dict(B02='blue', B03='green', B04='red', B05='low IR', B06='mid IR'
 
 date = data.coords['date'].data[9]
 bands = data.coords['band'].data
-num_columns = len(bands) / 2
+num_columns = 5
 num_images = 0
 figure = plt.figure()
 
