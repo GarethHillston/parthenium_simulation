@@ -12,7 +12,6 @@ def get_normalised_band_data(band, date):
     raw_data = data.sel(band=band, date=date).reflectance.data
     clipped_data = sigma_clip(raw_data, sigma_upper=3)
     clipped_data.data[clipped_data.mask] = np.median(raw_data)
-    # clipped_data = raw_data.clip(max=3500)
     normalised_data = clipped_data / clipped_data.max()
     return normalised_data
 
@@ -26,6 +25,7 @@ def get_normalised_band_data_manual_clip(band, date):
 
 dates = data.coords['date'].data[:10]
 num_images = 0
+figure = plt.figure()
 
 for date in dates:
     num_images += 1
@@ -35,9 +35,13 @@ for date in dates:
 
     rgb_data = np.dstack((red_band, green_band, blue_band))
 
-    figure = plt.figure()
-    # axes = figure.add_subplot(1, len(dates), num_images)
-    axes = figure.add_subplot(111)
+    axes = figure.add_subplot(1, len(dates), num_images)
+    axes.title.set_text(date.split('T')[0])
+    axes.axis('off')
     axes.imshow(rgb_data)
-    plt.savefig('plots/rawalpindi-{iter:03d}.png'.format(iter=num_images))
-    plt.close()
+
+figure.tight_layout()
+plt.show()
+
+#axes = figure.add_subplot(111)
+#plt.savefig('plots/rawalpindi-{iter:03d}.png'.format(iter=num_images), bbox_inches='tight')
