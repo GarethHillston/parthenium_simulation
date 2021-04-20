@@ -6,9 +6,9 @@ filePath = '../../../../scratch/nas_bridle/sentinel/shared/rawalpindi_1.nc'
 
 data = xr.open_dataset(filePath)
 
-red_raw = data.sel(band='B04', date='2019-07-05T05:46:41Z').reflectance.data
-green_raw = data.sel(band='B03', date='2019-07-05T05:46:41Z').reflectance.data
-blue_raw = data.sel(band='B02', date='2019-07-05T05:46:41Z').reflectance.data
+red_raw = data.sel(band='B04', date='2019-07-05T05:46:41Z').reflectance.raw_data
+green_raw = data.sel(band='B03', date='2019-07-05T05:46:41Z').reflectance.raw_data
+blue_raw = data.sel(band='B02', date='2019-07-05T05:46:41Z').reflectance.raw_data
 
 # red_raw = red_raw.clip(max=3500)
 # green_raw = green_raw.clip(max=3500)

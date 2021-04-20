@@ -9,14 +9,14 @@ data = xr.open_dataset(filePath)
 
 
 def get_normalised_band_data_manual_clip(band, date):
-    raw_data = data.sel(band=band, date=date).reflectance.data
+    raw_data = data.sel(band=band, date=date).reflectance.raw_data
     clipped_data = raw_data.clip(max=3500)
     normalised_data = clipped_data / clipped_data.max()
     return normalised_data
 
 
-band_names = dict(B02='blue', B03='green', B04='red', B05='low IR', B06='mid IR', B07='high IR', B08='wide IR',
-                  B8A='higher IR', B11='1610 SWIR', B12='2190 SWIR')
+band_names = dict(B02='blue', B03='green', B04='red', B05='low IR', B06='mid NIR', B07='high NIR', B08='wide NIR',
+                  B8A='higher NIR', B11='1610 SWIR', B12='2190 SWIR')
 
 date = data.coords['date'].data[9]
 bands = data.coords['band'].data

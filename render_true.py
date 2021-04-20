@@ -1,47 +1,42 @@
 import xarray as xr
 import matplotlib.pyplot as plt
 import numpy as np
-from astropy.stats import sigma_clip
+import get_data
 
 filePath = '../../../../scratch/nas_bridle/sentinel/shared/rawalpindi_1.nc'
-
-data = xr.open_dataset(filePath)
-
-
-def get_normalised_band_data(band, date):
-    raw_data = data.sel(band=band, date=date).reflectance.data
-    clipped_data = sigma_clip(raw_data, sigma_upper=3)
-    clipped_data.data[clipped_data.mask] = np.median(raw_data)
-    normalised_data = clipped_data / clipped_data.max()
-    return normalised_data
+raw_data = xr.open_dataset(filePath)
 
 
-def get_normalised_band_data_manual_clip(band, date):
-    raw_data = data.sel(band=band, date=date).reflectance.data
-    clipped_data = raw_data.clip(max=3500)
-    normalised_data = clipped_data / clipped_data.max()
-    return normalised_data
+def render_rgb_series():
+    num_images = 0
+    figure = plt.figure()
+
+    for date in dates:
+        num_images += 1
+        red_band = get_data.by_band_and_date_manual_clip(raw_data, 'B04', date)
+        green_band = get_data.by_band_and_date_manual_clip(raw_data, 'B03', date)
+        blue_band = get_data.by_band_and_date_manual_clip(raw_data, 'B02', date)
+
+        rgb_data = np.dstack((red_band, green_band, blue_band))
+
+        axes = figure.add_subplot(1, len(dates), num_images)
+        axes.title.set_text(date.split('T')[0])
+        axes.axis('off')
+        axes.imshow(rgb_data)
+
+    figure.tight_layout()
+    plt.show()
 
 
-dates = data.coords['date'].data[:10]
-num_images = 0
-figure = plt.figure()
+def render_ndvi():
 
-for date in dates:
-    num_images += 1
-    red_band = get_normalised_band_data_manual_clip('B04', date)
-    green_band = get_normalised_band_data_manual_clip('B03', date)
-    blue_band = get_normalised_band_data_manual_clip('B02', date)
 
-    rgb_data = np.dstack((red_band, green_band, blue_band))
+    figure = plt.figure()
+    axes = figure.add_subplot(111)
+    axes.imshow(ndvi_data)
+    plt.show()
 
-    axes = figure.add_subplot(1, len(dates), num_images)
-    axes.title.set_text(date.split('T')[0])
-    axes.axis('off')
-    axes.imshow(rgb_data)
 
-figure.tight_layout()
-plt.show()
+dates = raw_data.coords['date'].data[:10]
 
-#axes = figure.add_subplot(111)
-#plt.savefig('plots/rawalpindi-{iter:03d}.png'.format(iter=num_images), bbox_inches='tight')
+render_ndvi()
