@@ -6,6 +6,28 @@ band_names = dict(B02='blue', B03='green', B04='red', B05='low IR', B06='mid NIR
                   B8A='higher NIR', B11='1610 SWIR', B12='2190 SWIR')
 
 
+def histogram(raw_data, date):
+    red_raw = raw_data.sel(band='B04', date=date).reflectance.data
+    green_raw = raw_data.sel(band='B03', date=date).reflectance.data
+    blue_raw = raw_data.sel(band='B02', date=date).reflectance.data
+
+    red_raw = red_raw.clip(max=3500)
+    green_raw = green_raw.clip(max=3500)
+    blue_raw = blue_raw.clip(max=3500)
+
+    red_raw_flattened = red_raw.flatten()
+    green_raw_flattened = green_raw.flatten()
+    blue_raw_flattened = blue_raw.flatten()
+
+    flat_array = [red_raw_flattened, green_raw_flattened, blue_raw_flattened]
+
+    figure = plt.figure()
+    colors = ['red', 'green', 'blue']
+    axes2 = figure.add_subplot(111)
+    axes2.hist(flat_array, bins=30, histtype='bar', color=colors)
+    plt.show()
+
+
 def all_bands(raw_data, date):
     num_images = 0
     bands = raw_data.coords['band'].data

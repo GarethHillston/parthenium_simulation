@@ -10,13 +10,9 @@ red_raw = data.sel(band='B04', date='2019-07-05T05:46:41Z').reflectance.raw_data
 green_raw = data.sel(band='B03', date='2019-07-05T05:46:41Z').reflectance.raw_data
 blue_raw = data.sel(band='B02', date='2019-07-05T05:46:41Z').reflectance.raw_data
 
-# red_raw = red_raw.clip(max=3500)
-# green_raw = green_raw.clip(max=3500)
-# blue_raw = blue_raw.clip(max=3500)
-
-red_raw = sigma_clip(red_raw)
-green_raw = sigma_clip(green_raw)
-blue_raw = sigma_clip(blue_raw)
+red_raw = red_raw.clip(max=3500)
+green_raw = green_raw.clip(max=3500)
+blue_raw = blue_raw.clip(max=3500)
 
 red_raw_flattened = red_raw.flatten()
 green_raw_flattened = green_raw.flatten()
