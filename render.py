@@ -11,15 +11,15 @@ def histogram(raw_data, date):
     green_raw = raw_data.sel(band='B03', date=date).reflectance.data
     blue_raw = raw_data.sel(band='B02', date=date).reflectance.data
 
-    red_raw = red_raw.clip(max=3500)
-    green_raw = green_raw.clip(max=3500)
-    blue_raw = blue_raw.clip(max=3500)
+    red_clipped = red_raw.clip(max=3500)
+    green_clipped = green_raw.clip(max=3500)
+    blue_clipped = blue_raw.clip(max=3500)
 
-    red_raw_flattened = red_raw.flatten()
-    green_raw_flattened = green_raw.flatten()
-    blue_raw_flattened = blue_raw.flatten()
+    red_flattened = red_clipped.flatten()
+    green_flattened = green_clipped.flatten()
+    blue_flattened = blue_clipped.flatten()
 
-    flat_array = [red_raw_flattened, green_raw_flattened, blue_raw_flattened]
+    flat_array = [red_flattened, green_flattened, blue_flattened]
 
     figure = plt.figure()
     colors = ['red', 'green', 'blue']
