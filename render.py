@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+from matplotlib.colors import LinearSegmentedColormap
 import numpy as np
 import get_data
 
@@ -79,43 +80,25 @@ def get_ndvi_scores(raw_data, date):
     red = get_data.by_band_and_date_manual_clip(raw_data, 'B04', date)
     nir = get_data.by_band_and_date_manual_clip(raw_data, 'B08', date)
 
-    return (nir - red) / (nir + red)
+    return (nir.astype(float) - red.astype(float)) / (nir + red)
 
 
 def ndvi(raw_data, date):
     ndvi_data = get_ndvi_scores(raw_data, date)
     norm_data = normalise(ndvi_data)
 
-    print("ndvi")
-    print(ndvi_data.min())
-    print(ndvi_data.max())
-    print(ndvi_data.mean())
-    print(np.median(ndvi_data))
-    print(ndvi_data)
-
-    colours = {}
-
-    # 000000
-    # a50026
-    # d73027
-    # f46d43
-    # fdae61
-    # fee08b
-    # ffffbf
-    # d9ef8b
-    # a6d96a
-    # 66bd63
-    # 1a9850
-    # 006837
+    colours = {"#000000", "#a50026", "#d73027", "#f46d43", "#fdae61", "#fee08b", "#ffffbf", "#d9ef8b", "#a6d96a",
+               "#66bd63", "#1a9850", "#006837"}
 
     figure = plt.figure()
     axes = figure.add_subplot(111)
-    axes.imshow(norm_data, cmap=plt.get_cmap('viridis'))
+    axes.imshow(norm_data, cmap=cmap)
+    axes.axis('off')
     plt.show()
 
 
 def normalise(array):
-    return array / array.max()
+    return (array - np.min(array)) / (np.max(array) - np.min(array))
 
 
 class Render:
