@@ -2,17 +2,18 @@ import numpy as np
 from astropy.stats import sigma_clip
 
 
-def by_band_and_date(raw_data, band, date):
-    reflectance_data = raw_data.sel(band=band, date=date).reflectance.data
+def normalise(array):
+    return (array - np.min(array)) / (np.max(array) - np.min(array))
+
+
+def by_band_and_date_sigma_clip(raw_data, band, date):
+    reflectance_data = raw_data.sel(band=band, date=date).reflectance.data.astype(np.float64)
     clipped_data = sigma_clip(reflectance_data, sigma_upper=3)
-    clipped_data.raw_data[clipped_data.mask] = np.median(reflectance_data)
     return clipped_data
 
 
-def by_band_and_date_manual_clip(raw_data, band, date):
-    reflectance_data = raw_data.sel(band=band, date=date).reflectance.data
-    clipped_data = reflectance_data.clip(max=3500)
-    return clipped_data
+def by_band_and_date(raw_data, band, date):
+    return raw_data.sel(band=band, date=date).reflectance.data.astype(np.float64)
 
 
 class GetData:

@@ -36,7 +36,7 @@ def all_bands(raw_data, date):
 
     for band in bands:
         num_images += 1
-        reflectance_data = get_data.by_band_and_date_manual_clip(raw_data, band, date)
+        reflectance_data = get_data.by_band_and_date(raw_data, band, date)
 
         print(reflectance_data)
 
@@ -57,9 +57,15 @@ def rgb_series(raw_data, dates):
 
     for date in dates:
         num_images += 1
-        red_band = get_data.by_band_and_date_manual_clip(raw_data, 'B04', date)
-        green_band = get_data.by_band_and_date_manual_clip(raw_data, 'B03', date)
-        blue_band = get_data.by_band_and_date_manual_clip(raw_data, 'B02', date)
+        red_band = get_data.by_band_and_date(raw_data, 'B04', date)
+        green_band = get_data.by_band_and_date(raw_data, 'B03', date)
+        blue_band = get_data.by_band_and_date(raw_data, 'B02', date)
+
+        red_band = red_band.clip(max=3500)
+        green_band = green_band.clip(max=3500)
+        blue_band = blue_band.clip(max=3500)
+
+        #clipped_data = reflectance_data.clip(max=3500)
 
         norm_red = normalise(red_band)
         norm_green = normalise(green_band)
@@ -76,23 +82,20 @@ def rgb_series(raw_data, dates):
     plt.show()
 
 
-def get_ndvi_scores(raw_data, date):
-    red = get_data.by_band_and_date_manual_clip(raw_data, 'B04', date)
-    nir = get_data.by_band_and_date_manual_clip(raw_data, 'B08', date)
+def basic_plot(image_data, colour_map):
+    figure = plt.figure()
+    axes = figure.add_subplot(111)
+    axes.imshow(image_data, cmap=plt.get_cmap(colour_map))
+    axes.axis('off')
+    plt.show()
 
-    return (nir.astype(float) - red.astype(float)) / (nir + red)
 
-
-def ndvi(raw_data, date):
-    ndvi_data = get_ndvi_scores(raw_data, date)
-    norm_data = normalise(ndvi_data)
-
-    colours = {"#000000", "#a50026", "#d73027", "#f46d43", "#fdae61", "#fee08b", "#ffffbf", "#d9ef8b", "#a6d96a",
-               "#66bd63", "#1a9850", "#006837"}
+def rgb_plot(rgb_data):
+    normalise(rgb_data)
 
     figure = plt.figure()
     axes = figure.add_subplot(111)
-    axes.imshow(norm_data, cmap=cmap)
+    axes.imshow(rgb_data)
     axes.axis('off')
     plt.show()
 
