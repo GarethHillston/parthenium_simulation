@@ -8,7 +8,7 @@ raw_data = xr.open_dataset(filePath)
 
 date_range = raw_data.coords['date'].data
 
-image_data = calculate.ndvi(raw_data, date_range[15])
-render.basic_plot(image_data, 'inferno')
+image_data = calculate.urban_classified(raw_data, date_range[15])
+render.rgb_plot(image_data)
 
 # display.bare_soil_index(raw_data, date_range[15])

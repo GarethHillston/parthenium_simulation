@@ -91,8 +91,6 @@ def basic_plot(image_data, colour_map):
 
 
 def rgb_plot(rgb_data):
-    normalise(rgb_data)
-
     figure = plt.figure()
     axes = figure.add_subplot(111)
     axes.imshow(rgb_data)

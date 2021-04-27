@@ -36,13 +36,36 @@ def bare_soil_index(raw_data, date):
     nir = get_data.by_band_and_date(raw_data, 'B08', date)
     blue = get_data.by_band_and_date(raw_data, 'B02', date)
 
-    return ((low_swir + red) - (nir + blue)) / ((low_swir + red) + (nir + blue))
+    soil_index = 2.5 * ((low_swir + red) - (nir + blue)) / ((low_swir + red) + (nir + blue))
+
+    return soil_index
+
+
+def __urban_pixel_value(i, j, ndvi, ndmi, soil, swir):
+    if ndmi[i][j] > 0.2:
+        return [0, 0.5, 1]
+    elif swir[i][j] > 0.8 or ndvi[i][j] < 0.1:
+        return [1, 1, 1]
+    elif ndvi[i][j] > 0.2:
+        return [0, 0.3 * ndvi[i][j], 0]
+    else:
+        return [soil[i][j], 0.2, 0]
 
 
 def urban_classified(raw_data, date):
     ndvi_scores = ndvi(raw_data, date)
     ndmi_scores = ndmi(raw_data, date)
-    # ((B11 + B04) - (B08 + B02)) / ((B11 + B04) + (B08 + B02));
+    soil_index = bare_soil_index(raw_data, date)
+    low_swir = get_data.by_band_and_date(raw_data, 'B11', date)
+
+    shape = np.shape(low_swir)
+    classified_image = np.zeros((shape[0], shape[1], 3))
+
+    for i in range(shape[0]):
+        for j in range(shape[1]):
+            classified_image[i][j] = __urban_pixel_value(i, j, ndvi_scores, ndmi_scores, soil_index, low_swir)
+
+    return classified_image
 
 
 class Calculate:
