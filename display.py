@@ -4,6 +4,37 @@ import indices
 import render
 
 
+def histogram(raw_data, date, bands):
+    data = {}
+
+    for band in bands:
+        data.update({band: raw_data.sel(band=band, date=date).reflectance.data})
+
+    render.histogram(data)
+
+
+def multi_plot(raw_data, date, bands):
+    data = {}
+
+    for band in bands:
+        data.update({band: raw_data.sel(band=band, date=date).reflectance.data})
+
+    render.multi_plot(data, date)
+
+
+def rgb_series(raw_data, date_range):
+    image_series = {}
+
+    for date in date_range:
+        red_band = get_data.by_band_and_date_manual_clip(raw_data, 'B04', date)
+        green_band = get_data.by_band_and_date_manual_clip(raw_data, 'B03', date)
+        blue_band = get_data.by_band_and_date_manual_clip(raw_data, 'B02', date)
+
+        image_series.update({date: [red_band, green_band, blue_band]})
+
+    render.rgb_series(image_series)
+
+
 def bare_soil_index(raw_data, date):
     soil_index = indices.bare_soil_index(raw_data, date)
 
@@ -17,15 +48,6 @@ def bare_soil_index(raw_data, date):
     image_data = np.dstack((norm_index, norm_nir, norm_swir))
 
     render.rgb_plot(image_data)
-
-
-def histogram(raw_data, date, bands):
-    data = {}
-
-    for band in bands:
-        data.update({band: raw_data.sel(band=band, date=date).reflectance.data})
-
-    render.histogram(data)
 
 
 class Display:

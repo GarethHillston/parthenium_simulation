@@ -19,54 +19,40 @@ def histogram(bands_data):
     plt.show()
 
 
-def multi_plot(raw_data, date):
+def multi_plot(image_data, date):
     num_images = 0
-    bands = raw_data.coords['band'].data
     figure = plt.figure()
 
-    for band in bands:
+    for key in image_data.keys():
         num_images += 1
-        reflectance_data = get_data.by_band_and_date(raw_data, band, date)
 
-        print(reflectance_data)
-
-        normalised_reflectance = normalise(reflectance_data)
-
-        axes = figure.add_subplot(1, len(bands), num_images)
-        axes.title.set_text(band_names[band])
+        axes = figure.add_subplot(1, len(image_data), num_images)
+        axes.title.set_text(key)
         axes.axis('off')
-        axes.imshow(normalised_reflectance)
+        axes.imshow(image_data[key])
 
     figure.tight_layout()
     plt.show()
 
 
-def rgb_series(raw_data, dates):
+def rgb_series(image_series):
     num_images = 0
     figure = plt.figure()
 
-    for date in dates:
+    for date in image_series.keys():
         num_images += 1
-        red_band = get_data.by_band_and_date(raw_data, 'B04', date)
-        green_band = get_data.by_band_and_date(raw_data, 'B03', date)
-        blue_band = get_data.by_band_and_date(raw_data, 'B02', date)
+        rgb_cube = image_series[date]
 
-        red_band = red_band.clip(max=3500)
-        green_band = green_band.clip(max=3500)
-        blue_band = blue_band.clip(max=3500)
+        norm_red = normalise(rgb_cube[0])
+        norm_green = normalise(rgb_cube[1])
+        norm_blue = normalise(rgb_cube[2])
 
-        #clipped_data = reflectance_data.clip(max=3500)
+        image = np.dstack((norm_red, norm_green, norm_blue))
 
-        norm_red = normalise(red_band)
-        norm_green = normalise(green_band)
-        norm_blue = normalise(blue_band)
-
-        rgb_data = np.dstack((norm_red, norm_green, norm_blue))
-
-        axes = figure.add_subplot(1, len(dates), num_images)
+        axes = figure.add_subplot(1, len(image_series), num_images)
         axes.title.set_text(date.split('T')[0])
         axes.axis('off')
-        axes.imshow(rgb_data)
+        axes.imshow(image)
 
     figure.tight_layout()
     plt.show()
