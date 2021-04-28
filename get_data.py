@@ -16,5 +16,9 @@ def by_band_and_date(raw_data, band, date):
     return raw_data.sel(band=band, date=date).reflectance.data.astype(np.float64)
 
 
+def all_bands_by_date(raw_data, date):
+    return raw_data.sel(date=date).reflectance.data.astype(np.float64)
+
+
 class GetData:
     pass

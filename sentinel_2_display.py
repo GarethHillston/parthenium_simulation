@@ -8,7 +8,4 @@ raw_data = xr.open_dataset(filePath)
 
 date_range = raw_data.coords['date'].data
 
-image_data = calculate.urban_classified(raw_data, date_range[15])
-render.rgb_plot(image_data)
-
-# display.bare_soil_index(raw_data, date_range[15])
+display.histogram(raw_data, date_range[1], ['B02', 'B03', 'B04'])

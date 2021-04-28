@@ -19,5 +19,14 @@ def bare_soil_index(raw_data, date):
     render.rgb_plot(image_data)
 
 
+def histogram(raw_data, date, bands):
+    data = {}
+
+    for band in bands:
+        data.update({band: raw_data.sel(band=band, date=date).reflectance.data})
+
+    render.histogram(data)
+
+
 class Display:
     pass
