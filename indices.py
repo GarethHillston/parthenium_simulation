@@ -68,5 +68,5 @@ def urban_classified(raw_data, date):
     return classified_image
 
 
-class Calculate:
+class Indices:
     pass

@@ -1,11 +1,11 @@
 import numpy as np
 import get_data
-import calculate
+import indices
 import render
 
 
 def bare_soil_index(raw_data, date):
-    soil_index = calculate.bare_soil_index(raw_data, date)
+    soil_index = indices.bare_soil_index(raw_data, date)
 
     nir = get_data.by_band_and_date(raw_data, 'B08', date)
     low_swir = get_data.by_band_and_date(raw_data, 'B11', date)
