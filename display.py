@@ -22,7 +22,7 @@ def multi_plot(raw_data, date, bands):
     render.multi_plot(data, date)
 
 
-def rgb_series(raw_data, date_range):
+def rgb_series(raw_data, date_range, to_file):
     image_series = {}
 
     for date in date_range:
@@ -32,7 +32,10 @@ def rgb_series(raw_data, date_range):
 
         image_series.update({date: [red_band, green_band, blue_band]})
 
-    render.rgb_series(image_series)
+    if to_file:
+        render.rgb_series_to_file(image_series)
+    else:
+        render.rgb_series(image_series)
 
 
 def bare_soil_index(raw_data, date):
