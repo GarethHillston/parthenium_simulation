@@ -1,8 +1,5 @@
 import numpy as np
-import get_data
-import indices
-import render
-import classify
+from imaging import get_data, indices, render, classify
 
 
 def histogram(raw_data, date, bands):
@@ -56,27 +53,30 @@ def bare_soil_index(raw_data, date):
 
 def classification_progression(raw_data, dates, start_date, end_date, image_size):
     image_data = {}
+    clusters = 8
 
     training_set = []
     for date in dates:
-        training_set.append(get_data.all_bands_by_date(raw_data, date))
+        training_set.append(indices.ndvi(raw_data, date))
     training_set = np.array(training_set)
-    classifier = classify.train_kmeans(training_set)
+    classifier = classify.train_kmeans(training_set, 1, clusters)
 
-    start_set = get_data.all_bands_by_date(raw_data, start_date)
-    start_set = start_set.reshape(np.prod(image_size), 10)
+    start_set = indices.ndvi(raw_data, start_date)
+    start_set = start_set.reshape(np.prod(image_size), 1)
     start_results = classify.run_classification(classifier, start_set, image_size)
     image_data[start_date] = start_results
 
-    end_set = get_data.all_bands_by_date(raw_data, end_date)
-    end_set = end_set.reshape(np.prod(image_size), 10)
+    end_set = indices.ndvi(raw_data, end_date)
+    end_set = end_set.reshape(np.prod(image_size), 1)
     end_results = classify.run_classification(classifier, end_set, image_size)
     image_data[end_date] = end_results
 
-    return image_data
+    colours = ['plum', 'coral', 'lightgreen', 'paleturquoise', 'black', 'white', 'silver', 'firebrick', 'khaki', 'royalblue', 'forestgreen']
+    colour_subset = colours[0:clusters]
+    render.multi_plot(image_data, colour_subset)
 
-    # colours = {'slateblue', 'aquamarine', 'indianred'}
-    # render.multi_plot(progress, colours)
+    return [start_results, end_results]
+
 
 
 class Display:

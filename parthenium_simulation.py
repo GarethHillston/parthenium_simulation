@@ -1,20 +1,18 @@
 import numpy as np
+from modelling import utilities, simulate
 
-from modelling import initialise_grid, plot_data, spread_model
+# simulate.basic_markov_sim(100, 100)
 
-grid_size = 100
-max_iterations = 100
+progress = np.load('./progressions/progress_indexed.npy', allow_pickle=True)
 
+num_clusters = np.max(progress) + 1
+transition_matrix = np.zeros((num_clusters, num_clusters), dtype=int)
+start_classes = progress[0].flatten()
+end_classes = progress[-1].flatten()
 
-# Initialise cells
-#locations = np.zeros((gridSize, gridSize), dtype=float)
-locations = np.zeros((grid_size, grid_size), dtype=int)
+for i in range(len(start_classes)):
+    transition_matrix[start_classes[i]][end_classes[i]] += 1
 
-initialise_grid.random_start(locations, grid_size, 5)
+normalised_matrix = utilities.normalise_matrix(transition_matrix)
 
-for i in range(max_iterations):
-    plot_data.replot(locations, i)
-
-    locations = spread_model.markov_basic(locations, grid_size)
-
-plot_data.replot(locations, max_iterations + 1)
+print(np.array_str(np.array(normalised_matrix), precision=4, suppress_small=True))

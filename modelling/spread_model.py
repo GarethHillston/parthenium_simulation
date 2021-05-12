@@ -7,7 +7,7 @@ def markov_basic(locations, grid_size):
     # [DD, DA]  Dead or Alive
     # [AD, AA]
     transition_matrix = [[0.8, 0.2],
-                         [0.01, 0.99]]
+                         [0.0, 1.0]]
 
     # for each cell, transition randomly as per matrix
     for x in range(0, grid_size - 1):

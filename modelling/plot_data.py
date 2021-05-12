@@ -5,7 +5,7 @@ import matplotlib.pyplot as plt
 import matplotlib.colors as colours
 
 now = datetime.now().strftime("%d_%m_%y__%H%M%S")
-output_folder = "./simulations/{dateTime}".format(dateTime=now)
+output_folder = "./modelling/simulations/{dateTime}".format(dateTime=now)
 os.mkdir(output_folder)
 
 

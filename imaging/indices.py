@@ -1,5 +1,5 @@
 import numpy as np
-import get_data
+from imaging import get_data
 
 
 def __index(add_band, sub_band):

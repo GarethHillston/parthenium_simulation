@@ -1,5 +1,6 @@
 from sklearn.cluster import KMeans
-import indices
+from imaging import indices
+
 
 def kmeans_one_feature(raw_data, date_range):
     valid_indices = [1, 2, 4, 5, 6, 8]
