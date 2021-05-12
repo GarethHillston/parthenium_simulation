@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/pakistan_render.iml" filepath="$PROJECT_DIR$/.idea/pakistan_render.iml" />
+      <module fileurl="file://$PROJECT_DIR$/../parthenium_simulation/.idea/parthenium_simulation.iml" filepath="$PROJECT_DIR$/../parthenium_simulation/.idea/parthenium_simulation.iml" />
     </modules>
   </component>
 </project>

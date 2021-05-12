@@ -15,4 +15,5 @@ for i in range(len(start_classes)):
 
 normalised_matrix = utilities.normalise_matrix(transition_matrix)
 
+
 print(np.array_str(np.array(normalised_matrix), precision=4, suppress_small=True))
