@@ -1,6 +1,6 @@
 import xarray as xr
 import numpy as np
-from imaging import get_data, functions
+from imaging import get_data, functions, render
 
 filePath = '../../../../scratch/nas_bridle/sentinel/shared/rawalpindi_1.nc'
 raw_data = xr.open_dataset(filePath)
@@ -11,6 +11,9 @@ invalid_dates = [0, 3, 7, 10, 11, 16, 18, 20, 22, 23, 24, 25, 28, 30, 31, 33, 34
 
 image_size = np.shape(get_data.by_band_and_date(raw_data, 'B02', date_range[0]))
 
-dates = date_range[valid_dates[0:3]]
-progression = functions.classification_progression(raw_data, dates, dates[0], dates[-1], image_size)
-np.save('./progressions/progress_indexed.npy', progression)
+# dates = date_range[valid_dates[0:3]]
+# progression = functions.classification_progression(raw_data, dates, dates[0], dates[-1], image_size)
+# np.save('./progressions/progress_indexed.npy', progression)
+
+image = np.load('./modelling/simulations/14_05_21__150938/data-000.png.npy')
+render.single_plot(image, 'Colour test', 'inferno')
