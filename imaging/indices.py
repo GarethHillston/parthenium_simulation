@@ -2,7 +2,7 @@ import numpy as np
 from imaging import get_data
 
 
-def __index(add_band, sub_band):
+def index(add_band, sub_band):
     return (add_band.astype(float) - sub_band.astype(float)) / (add_band + sub_band)
 
 
@@ -11,7 +11,7 @@ def ndvi(raw_data, date):
     red = get_data.by_band_and_date(raw_data, 'B04', date)
     nir = get_data.by_band_and_date(raw_data, 'B08', date)
 
-    return __index(nir, red)
+    return index(nir, red)
 
 
 # https://custom-scripts.sentinel-hub.com/sentinel-2/gndvi/
@@ -19,7 +19,7 @@ def gndvi(raw_data, date):
     green = get_data.by_band_and_date(raw_data, 'B03', date)
     nir = get_data.by_band_and_date(raw_data, 'B08', date)
 
-    return __index(nir, green)
+    return index(nir, green)
 
 
 # https://custom-scripts.sentinel-hub.com/sentinel-2/ndmi/
@@ -27,7 +27,7 @@ def ndmi(raw_data, date):
     swir = get_data.by_band_and_date(raw_data, 'B11', date)
     nir = get_data.by_band_and_date(raw_data, 'B08', date)
 
-    return __index(nir, swir)
+    return index(nir, swir)
 
 
 def bare_soil_index(raw_data, date):

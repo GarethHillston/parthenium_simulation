@@ -25,7 +25,7 @@ def histogram(bands_data):
 
 
 def multi_plot(image_data, colour_map):
-    cmap = plt.get_cmap(colour_map) if colour_map == str else ListedColormap(colour_map)
+    cmap = plt.get_cmap(colour_map) if colour_map == str else plt.get_cmap('inferno')
     num_images = 0
     figure = plt.figure()
 

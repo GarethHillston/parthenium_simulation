@@ -20,15 +20,19 @@ def multi_plot(raw_data, date, bands):
     render.multi_plot(data, date)
 
 
+def generate_rgb_image(raw_data, date):
+    red_band = get_data.by_band_and_date_manual_clip(raw_data, 'B04', date)
+    green_band = get_data.by_band_and_date_manual_clip(raw_data, 'B03', date)
+    blue_band = get_data.by_band_and_date_manual_clip(raw_data, 'B02', date)
+
+    return {date: [red_band, green_band, blue_band]}
+
+
 def rgb_series(raw_data, date_range, to_file):
     image_series = {}
 
     for date in date_range:
-        red_band = get_data.by_band_and_date_manual_clip(raw_data, 'B04', date)
-        green_band = get_data.by_band_and_date_manual_clip(raw_data, 'B03', date)
-        blue_band = get_data.by_band_and_date_manual_clip(raw_data, 'B02', date)
-
-        image_series.update({date: [red_band, green_band, blue_band]})
+        image_series.update(generate_rgb_image(raw_data, date))
 
     if to_file:
         render.rgb_series_to_file(image_series)
@@ -77,6 +81,24 @@ def classification_progression(raw_data, dates, start_date, end_date, image_size
 
     return [start_results, end_results]
 
+
+def mask_set():
+    return
+    # scl_mask = get_data.cloud_water_mask(raw_data, dates[0])
+    # band_data = get_data.all_bands_by_date(raw_data, dates[0])
+    # masked_set = []
+    #
+    # for i in range(image_size[0]):
+    #     for j in range(image_size[1]):
+    #         band_data[i][j] = band_data[i][j] * scl_mask[i][j]
+    #         if np.sum(band_data[i][j]) != 0:
+    #             masked_set.append(band_data[i][j])
+    #
+    # masked_set = np.array(masked_set)
+    # num_classes = 8
+    # classifier = classify.train_kmeans(masked_set, 10, num_classes)
+    #
+    # pickle.dump(classifier, open("./imaging/classifiers/allBandOneDateNoCloud.pkl", "wb"))
 
 
 class Display:

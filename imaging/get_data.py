@@ -26,5 +26,11 @@ def by_band_and_date_manual_clip(raw_data, band, date):
     return clipped_data
 
 
+def cloud_water_mask(raw_data, date):
+    scl_data = raw_data.sel(date=date).variables['SCL']
+    condition = scl_data > 5
+    return np.where(condition, 0, 1)
+
+
 class GetData:
     pass
