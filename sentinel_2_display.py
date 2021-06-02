@@ -41,6 +41,9 @@ for k in K:
                                    'euclidean'), axis=1)) / test_set.shape[0]
     mapping2[k] = kmeanModel.inertia_
 
+np.save('./imaging/classifiers/knee_plot_distortions.npy', distortions)
+np.save('./imaging/classifiers/knee_plot_inertias.npy', inertias)
+
 plt.plot(K, distortions, 'bx-')
 plt.xlabel('Values of K')
 plt.ylabel('Distortion')
