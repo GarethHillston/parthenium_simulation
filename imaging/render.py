@@ -66,7 +66,7 @@ def rgb_series(image_series):
 
 def single_plot(image_data, title, colour_map):
     cmap = plt.get_cmap(colour_map) if colour_map == str else ListedColormap(colour_map)
-    cmap = plt.get_cmap('inferno')
+    # cmap = plt.get_cmap('inferno')
 
     figure = plt.figure()
     axes = figure.add_subplot(111)
