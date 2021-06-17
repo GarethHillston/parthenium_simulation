@@ -28,7 +28,7 @@ def generate_rgb_image(raw_data, date):
     return {date: [red_band, green_band, blue_band]}
 
 
-def rgb_series(raw_data, date_range, to_file):
+def rgb_series(raw_data, date_range, to_file=False):
     image_series = {}
 
     for date in date_range:
@@ -55,7 +55,7 @@ def bare_soil_index(raw_data, date):
     render.rgb_plot(image_data)
 
 
-def classification_progression(raw_data, dates, start_date, end_date, image_size):
+def classification_progression_ndvi(raw_data, dates, start_date, end_date, image_size):
     image_data = {}
     clusters = 8
 
