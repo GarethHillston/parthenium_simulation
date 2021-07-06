@@ -101,5 +101,53 @@ def mask_set():
     # pickle.dump(classifier, open("./imaging/classifiers/allBandOneDateNoCloud.pkl", "wb"))
 
 
+def class_parth_stats():
+    predictions = np.load('./progressions/predictions.npy')
+    predictions = np.transpose(predictions)
+
+    classifications = np.load('./progressions/classification.npy')
+
+    class_stats = [[], [], [], [], [], [], [], []]
+
+    for predict_row, class_row in zip(predictions, classifications):
+        for parth, cluster in zip(predict_row, class_row):
+            class_stats[cluster].append(parth)
+
+    class_stat_size = len(class_stats)
+    for class_row, number in zip(class_stats, range(class_stat_size)):
+        print('Class ', number)
+        print('Mean   - ', np.nanmean(class_row))
+        print('Median - ', np.nanmedian(class_row))
+        print('STD    - ', np.nanstd(class_row))
+        print('Total  - ', len(class_row))
+        print()
+    total = 0
+    for class_row in class_stats:
+        total += np.nansum(class_row)
+
+    proportions = np.empty(class_stat_size)
+
+    for class_row, i in zip(class_stats, range(class_stat_size)):
+        proportions[i] = np.nansum(class_row) / total
+
+    print(proportions)
+    print(np.sum(proportions))
+
+    # figure = plt.figure()
+    #
+    # axes = figure.add_subplot(111)
+    # im = axes.imshow(output, cmap=plt.get_cmap('inferno'))
+    # axes.axis('off')
+    # axes.title.set_text("Predicted Parthenium")
+    #
+    # from mpl_toolkits.axes_grid1 import make_axes_locatable
+    # divider = make_axes_locatable(axes)
+    # cax = divider.append_axes("right", size="5%", pad=0.05)
+    # plt.colorbar(im, cax=cax)
+    #
+    # # plt.savefig('imaging/plots/comparison.png')
+    # plt.show()
+
+
 class Display:
     pass

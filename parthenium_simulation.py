@@ -1,17 +1,26 @@
 import numpy as np
-from modelling import utilities, simulate
+import utilities
+from modelling import transition_matrix, simulate
+import xarray as xr
 
-progress = np.load('./progressions/progress_indexed.npy', allow_pickle=True)
+filePath = '/scratch/nas_bridle/sentinel/shared/rawalpindi_1.nc'
+raw_data = xr.open_dataset(filePath)
 
-num_clusters = np.max(progress) + 1
-transition_matrix = np.zeros((num_clusters, num_clusters), dtype=int)
-start_classes = progress[0].flatten()
-end_classes = progress[-1].flatten()
+dates = utilities.get_dates(raw_data)
 
-for i in range(len(start_classes)):
-    transition_matrix[start_classes[i]][end_classes[i]] += 1
+# file_root = './progressions/19_20_binaries/'
+# last_prediction = np.load(file_root + 'bin_predict_' + dates[0].split('T')[0] + '.npy', allow_pickle=True)
+# matrix_stack = []
+#
+# for i in range(1, len(dates)):
+#     date = dates[i]
+#     date_neat = date.split('T')[0]
+#     prediction = np.load(file_root + 'bin_predict_' + date_neat + '.npy')
+#     matrix_stack.append(transition_matrix.create(np.dstack((last_prediction, prediction))))
+#     last_prediction = prediction
 
-normalised_matrix = utilities.normalise_matrix(transition_matrix)
-
-simulate.basic_markov_sim((2180, 2340), 50, normalised_matrix)
-# simulate.basic_markov_sim((500, 500), 50, [[0.8, 0.2], [0.0, 1.0]])
+matrix_stack = np.load('./matrix_stack.npy')
+avg_matrix = np.average(matrix_stack, axis=0)
+start_state = np.load('./progressions/19_20_binaries/bin_predict_2020-02-25.npy')
+print(avg_matrix)
+# simulate.markov(start_state, 50, avg_matrix)

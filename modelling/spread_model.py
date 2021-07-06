@@ -2,6 +2,21 @@ import numpy as np
 import random
 
 
+def markov_basic_all(locations, transition_matrix):
+    new_locs = locations.copy()
+    classes = range(len(transition_matrix))
+    shape = np.shape(locations)
+    size_x = shape[0]
+    size_y = shape[1]
+
+    # for each cell, transition randomly as per matrix
+    for x in range(0, size_x - 1):
+        for y in range(0, size_y - 1):
+            new_locs[x, y] = random.choices(classes, transition_matrix[locations[x][y]], k=1)[0]
+
+    return new_locs
+
+
 def markov_basic(locations, transition_matrix):
     new_locs = locations.copy()
     classes = range(len(transition_matrix))

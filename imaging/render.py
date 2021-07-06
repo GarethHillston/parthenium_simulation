@@ -1,4 +1,5 @@
 import matplotlib.pyplot as plt
+import matplotlib as mpl
 import numpy as np
 import os
 from datetime import datetime
@@ -8,8 +9,11 @@ from matplotlib.colors import ListedColormap
 band_names = dict(B02='blue', B03='green', B04='red', B05='low IR', B06='mid NIR', B07='high NIR', B08='wide NIR',
                   B8A='higher NIR', B11='1610 SWIR', B12='2190 SWIR')
 
+eight_colours = ['black', 'white', 'grey', 'blue', 'orange', 'green', 'purple', 'brown']
+
 now = datetime.now().strftime("%d_%m_%y__%H%M%S")
-output_folder = "./plots/{dateTime}".format(dateTime=now)
+root = "./imaging/plots/"
+output_folder = "{dateTime}".format(dateTime=now)
 
 
 def histogram(bands_data):
@@ -64,16 +68,24 @@ def rgb_series(image_series):
     plt.show()
 
 
-def single_plot(image_data, title, colour_map):
+def single_plot(image_data, title, colour_map, to_file):
     cmap = plt.get_cmap(colour_map) if colour_map == str else ListedColormap(colour_map)
-    # cmap = plt.get_cmap('inferno')
 
     figure = plt.figure()
     axes = figure.add_subplot(111)
     axes.imshow(image_data, cmap=cmap)
+    figure.set_dpi(600)
     axes.axis('off')
-    axes.title.set_text(title)
-    plt.show()
+
+    if title != '':
+        axes.title.set_text(title)
+
+    if to_file != '':
+        time = datetime.now().strftime("%H%M%S")
+        plt.savefig('{outputFolder}/plot_{time}.png'.format(outputFolder=root+to_file, time=time))
+        plt.close()
+    else:
+        plt.show()
 
 
 def rgb_plot(rgb_data):
