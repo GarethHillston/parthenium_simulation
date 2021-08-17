@@ -8,7 +8,8 @@ def random_start(locations, num_classes):
             locations[x][y] = np.random.randint(0, num_classes)
 
 
-def centre_start(locations, grid_size, num_seeds):
+def centre_start(locations, num_seeds):
+    grid_size = np.shape(locations)
     centre_x = grid_size[0] // 2
     range_x = grid_size[1] // 4
     centre_y = grid_size[1] // 2
@@ -18,6 +19,8 @@ def centre_start(locations, grid_size, num_seeds):
         seed_x = np.random.randint(centre_x - range_x, centre_x + range_x)
         seed_y = np.random.randint(centre_y - range_y, centre_y + range_y)
         locations[seed_x, seed_y] = 1
+
+    return locations
 
 
 class InitialiseGrid:

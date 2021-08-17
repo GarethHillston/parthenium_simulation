@@ -28,9 +28,8 @@ def by_band_and_date_manual_clip(raw_data, band, date):
 
 def cloud_water_mask(raw_data, date):
     scl_data = raw_data.sel(date=date).variables['SCL']
-    condition = scl_data > 5
-    scl_data in [4, 5, 7]
-    return np.where(condition, 0, 1)
+    condition = (scl_data == 4) | (scl_data == 5) | (scl_data == 7)
+    return np.where(condition, 1, 0)
 
 
 class GetData:

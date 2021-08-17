@@ -6,9 +6,13 @@ from matplotlib.colors import ListedColormap
 
 
 class PlotData:
-    now = datetime.now().strftime("%d_%m_%y__%H%M%S")
-    output_folder = "./modelling/simulations/{dateTime}".format(dateTime=now)
-    os.mkdir(output_folder)
+    def __init__(self, out_dir):
+        if (out_dir == ''):
+            now = datetime.now().strftime("%d_%m_%y__%H%M%S")
+            self.output_folder = "./modelling/simulations/{dateTime}".format(dateTime=now)
+        else:
+            self.output_folder = out_dir
+        os.mkdir(self.output_folder)
 
     def replot_binary(self, locations, iteration):
         figure = plt.figure()
@@ -24,7 +28,7 @@ class PlotData:
         axes = figure.add_subplot(111)
         cMap = colours.ListedColormap(
             {'white', 'navajowhite', 'coral', 'indianred', 'firebrick', 'maroon', 'indigo', 'black'})
-        axes.imshow(locations, cmap=plt.get_cmap('inferno'))
+        axes.imshow(locations, cmap=cMap)
         figure.set_dpi(300)
         plt.savefig('{outputFolder}/sim-{iter:03d}.png'.format(outputFolder=self.output_folder, iter=iteration))
         plt.close()

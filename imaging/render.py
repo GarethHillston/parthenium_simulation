@@ -5,14 +5,15 @@ import os
 from datetime import datetime
 
 from matplotlib.colors import ListedColormap
+from mpl_toolkits.axes_grid1 import make_axes_locatable
 
 band_names = dict(B02='blue', B03='green', B04='red', B05='low IR', B06='mid NIR', B07='high NIR', B08='wide NIR',
                   B8A='higher NIR', B11='1610 SWIR', B12='2190 SWIR')
 
 eight_colours = ['black', 'white', 'grey', 'blue', 'orange', 'green', 'purple', 'brown']
+binary_colours = ['white', 'mediumseagreen']
 
 now = datetime.now().strftime("%d_%m_%y__%H%M%S")
-root = "./imaging/plots/"
 output_folder = "{dateTime}".format(dateTime=now)
 
 
@@ -69,20 +70,29 @@ def rgb_series(image_series):
 
 
 def single_plot(image_data, title, colour_map, to_file):
-    cmap = plt.get_cmap(colour_map) if colour_map == str else ListedColormap(colour_map)
+    cmap = plt.get_cmap('inferno') if colour_map == str else ListedColormap(colour_map)
 
     figure = plt.figure()
     axes = figure.add_subplot(111)
-    axes.imshow(image_data, cmap=cmap)
+    im = axes.imshow(image_data)
     figure.set_dpi(600)
     axes.axis('off')
+
+    values = np.unique(image_data)
+    bounds = range(len(values)+1)
+    divider = make_axes_locatable(axes)
+    cax = divider.append_axes("right", size="5%", pad=0.2)
+    cbar = plt.colorbar(im, cax=cax, cmap=cmap, spacing='proportional', boundaries=bounds)
+    cbar.set_ticks(values+0.5)
+    cbar.set_ticklabels(values)
+    cbar.ax.tick_params(labelsize=8)
 
     if title != '':
         axes.title.set_text(title)
 
     if to_file != '':
         time = datetime.now().strftime("%H%M%S")
-        plt.savefig('{outputFolder}/plot_{time}.png'.format(outputFolder=root+to_file, time=time))
+        plt.savefig('{outputFolder}/plot_{time}.png'.format(outputFolder=to_file, time=time))
         plt.close()
     else:
         plt.show()

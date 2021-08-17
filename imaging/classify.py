@@ -1,6 +1,19 @@
 from sklearn.cluster import KMeans
 import numpy as np
+from sklearn.impute import SimpleImputer
+
 from imaging import get_data
+
+
+def train_kmeans_nans(training_set, features, clusters):
+    shape = np.shape(training_set)
+    flattened_image = np.prod(shape[:-1]) if features > 1 else np.prod(shape)
+    training_set = training_set.reshape(flattened_image, features)
+    imp = SimpleImputer(missing_values=np.nan, strategy='median')
+    imp = imp.fit(training_set)
+    training_imputed = imp.transform(training_set)
+    classifier = KMeans(n_clusters=clusters).fit(training_imputed)
+    return classifier
 
 
 def train_kmeans(training_set, features, clusters):
@@ -26,7 +39,7 @@ def kmeans_single(raw_data, date, features):
     test_shape = np.shape(test_set)
     test_set = test_set.reshape(np.prod(test_shape[:-1]), features)
 
-    return run_classification(kmeans, test_set, test_shape)
+    return run_classification(kmeans, test_set)
 
 
 def kmeans(raw_data, dates, features):
@@ -44,7 +57,7 @@ def kmeans(raw_data, dates, features):
     test_shape = np.shape(test_set)
     test_set = test_set.reshape(np.prod(test_shape[:-2]), features)
 
-    return run_classification(kmeans, test_set, test_shape)
+    return run_classification(kmeans, test_set)
 
 
 def knee_plot(raw_data, image_size, dates):
